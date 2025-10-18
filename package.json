@@ -6,6 +6,16 @@
     "doc": "docs"
   },
   "scripts": {
+    "build": "tsc",
+    "start": "node dist/server.js",
+    "dev": "nodemon",
+    "worker": "ts-node -r tsconfig-paths/register src/workers/evaluation.worker.ts",
+    "worker:dev": "nodemon --exec ts-node -r tsconfig-paths/register src/workers/evaluation.worker.ts",
+    "prisma:generate": "prisma generate",
+    "prisma:migrate": "prisma migrate dev",
+    "prisma:studio": "prisma studio",
+    "prisma:deploy": "prisma migrate deploy",
+    "ingest": "ts-node -r tsconfig-paths/register scripts/ingestDocuments.ts",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],

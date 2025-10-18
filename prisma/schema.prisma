@@ -3,10 +3,59 @@
 
 generator client {
   provider = "prisma-client-js"
-  output   = "../src/generated/prisma"
 }
 
 datasource db {
   provider = "sqlite"
   url      = env("DATABASE_URL")
+}
+
+// Document model - stores uploaded CV and project report metadata
+model Document {
+  id         String   @id @default(uuid())
+  filename   String
+  filepath   String
+  type       String   // 'cv' | 'report'
+  uploadedAt DateTime @default(now())
+
+  // Relations
+  cvJobs     Job[]    @relation("CVDocument")
+  reportJobs Job[]    @relation("ReportDocument")
+
+  @@index([type])
+}
+
+// Job model - stores evaluation job information
+model Job {
+  id        String   @id @default(uuid())
+  cvId      String
+  reportId  String
+  jobTitle  String
+  status    String   // 'queued' | 'processing' | 'completed' | 'failed'
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  cv        Document  @relation("CVDocument", fields: [cvId], references: [id])
+  report    Document  @relation("ReportDocument", fields: [reportId], references: [id])
+  result    Result?
+
+  @@index([cvId])
+  @@index([reportId])
+  @@index([status])
+}
+
+// Result model - stores AI evaluation results
+model Result {
+  id              Int      @id @default(autoincrement())
+  jobId           String   @unique
+  cvMatchRate     Float?
+  cvFeedback      String?
+  projectScore    Float?
+  projectFeedback String?
+  overallSummary  String?
+  createdAt       DateTime @default(now())
+
+  // Relations
+  job             Job      @relation(fields: [jobId], references: [id])
 }
