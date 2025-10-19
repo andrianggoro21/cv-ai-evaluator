@@ -1,5 +1,7 @@
 import express, { Application, Request, Response, NextFunction } from 'express';
 import cors from 'cors';
+import { errorHandler } from './middlewares/errorHandler';
+import { StatusCodes } from './utils/httpStatus';
 
 const app: Application = express();
 
@@ -38,21 +40,14 @@ app.get('/', (_req: Request, res: Response) => {
 });
 
 app.use((_req: Request, res: Response) => {
-  res.status(404).json({
+  res.status(StatusCodes.NOT_FOUND).json({
     success: false,
     error: 'Endpoint not found',
+    statusCode: StatusCodes.NOT_FOUND,
+    timestamp: new Date().toISOString(),
   });
 });
 
-app.use((err: Error, _req: Request, res: Response, _next: NextFunction) => {
-  console.error('[App] Error:', err);
-
-  res.status(500).json({
-    success: false,
-    error: process.env.NODE_ENV === 'development'
-      ? err.message
-      : 'Internal server error',
-  });
-});
+app.use(errorHandler);
 
 export default app;
