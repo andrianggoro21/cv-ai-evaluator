@@ -3,12 +3,10 @@ import cors from 'cors';
 
 const app: Application = express();
 
-// Middlewares
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// Request logging (development only)
 if (process.env.NODE_ENV === 'development') {
   app.use((req: Request, _res: Response, next: NextFunction) => {
     console.log(`[${new Date().toISOString()}] ${req.method} ${req.path}`);
@@ -16,7 +14,6 @@ if (process.env.NODE_ENV === 'development') {
   });
 }
 
-// Health check endpoint
 app.get('/health', (_req: Request, res: Response) => {
   res.json({
     success: true,
@@ -26,7 +23,6 @@ app.get('/health', (_req: Request, res: Response) => {
   });
 });
 
-// Root endpoint
 app.get('/', (_req: Request, res: Response) => {
   res.json({
     success: true,
@@ -41,12 +37,6 @@ app.get('/', (_req: Request, res: Response) => {
   });
 });
 
-// API Routes will be added here
-// app.use('/upload', uploadRoutes);
-// app.use('/evaluate', evaluateRoutes);
-// app.use('/result', resultRoutes);
-
-// 404 handler
 app.use((_req: Request, res: Response) => {
   res.status(404).json({
     success: false,
@@ -54,7 +44,6 @@ app.use((_req: Request, res: Response) => {
   });
 });
 
-// Global error handler
 app.use((err: Error, _req: Request, res: Response, _next: NextFunction) => {
   console.error('[App] Error:', err);
 

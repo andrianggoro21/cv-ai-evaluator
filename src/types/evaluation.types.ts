@@ -1,74 +1,52 @@
-/**
- * Evaluation Types
- * Used for AI evaluation results and scoring
- * Based on Case Study Brief requirements
- */
-
-// ============================================
-// CV EVALUATION (Stage 1)
-// ============================================
-
 export interface CVEvaluationResult {
-  cv_match_rate: number; // 0-1 scale (converted from 1-5)
-  cv_feedback: string; // Detailed feedback from LLM
+  cv_match_rate: number;
+  cv_feedback: string;
   breakdown: CVScoreBreakdown;
 }
 
 export interface CVScoreBreakdown {
-  technical_skills_match: number; // 1-5 scale
-  experience_level: number; // 1-5 scale
-  relevant_achievements: number; // 1-5 scale
-  cultural_fit: number; // 1-5 scale
+  technical_skills_match: number;
+  experience_level: number;
+  relevant_achievements: number;
+  cultural_fit: number;
 }
 
 export interface CVEvaluationCriteria {
-  technical_skills_weight: number; // 40%
-  experience_weight: number; // 25%
-  achievements_weight: number; // 20%
-  cultural_fit_weight: number; // 15%
+  technical_skills_weight: number;
+  experience_weight: number;
+  achievements_weight: number;
+  cultural_fit_weight: number;
 }
 
-// ============================================
-// PROJECT EVALUATION (Stage 2)
-// ============================================
-
 export interface ProjectEvaluationResult {
-  project_score: number; // 1-5 scale
-  project_feedback: string; // Detailed feedback from LLM
+  project_score: number;
+  project_feedback: string;
   breakdown: ProjectScoreBreakdown;
 }
 
 export interface ProjectScoreBreakdown {
-  correctness: number; // 1-5 scale
-  code_quality: number; // 1-5 scale
-  resilience_error_handling: number; // 1-5 scale
-  documentation: number; // 1-5 scale
-  creativity_bonus: number; // 1-5 scale
+  correctness: number;
+  code_quality: number;
+  resilience_error_handling: number;
+  documentation: number;
+  creativity_bonus: number;
 }
 
 export interface ProjectEvaluationCriteria {
-  correctness_weight: number; // 30%
-  code_quality_weight: number; // 25%
-  resilience_weight: number; // 20%
-  documentation_weight: number; // 15%
-  creativity_weight: number; // 10%
+  correctness_weight: number;
+  code_quality_weight: number;
+  resilience_weight: number;
+  documentation_weight: number;
+  creativity_weight: number;
 }
 
-// ============================================
-// FINAL ANALYSIS (Stage 3)
-// ============================================
-
 export interface FinalAnalysisResult {
-  overall_summary: string; // Combined summary from LLM (3-5 sentences)
+  overall_summary: string;
   recommendation: 'Highly Recommended' | 'Recommended' | 'Consider' | 'Not Recommended';
   strengths: string[];
   weaknesses: string[];
-  final_score: number; // Weighted average of CV + Project
+  final_score: number;
 }
-
-// ============================================
-// COMPLETE EVALUATION RESULT
-// ============================================
 
 export interface CompleteEvaluationResult {
   cv_evaluation: CVEvaluationResult;
@@ -85,13 +63,9 @@ export interface EvaluationMetadata {
   project_document_id: string;
   evaluation_date: Date;
   processing_time_seconds: number;
-  llm_model: string; // e.g., "gemini-1.5-flash"
+  llm_model: string;
   rag_contexts_retrieved: number;
 }
-
-// ============================================
-// RAG CONTEXT
-// ============================================
 
 export interface RAGContext {
   content: string;
@@ -108,10 +82,6 @@ export interface RAGRetrievalResult {
   retrieval_time_ms: number;
 }
 
-// ============================================
-// LLM PROMPT TEMPLATES
-// ============================================
-
 export interface CVEvaluationPrompt {
   cv_text: string;
   rag_contexts: RAGContext[];
@@ -122,7 +92,7 @@ export interface ProjectEvaluationPrompt {
   project_text: string;
   rag_contexts: RAGContext[];
   job_title: string;
-  cv_score: number; // From stage 1
+  cv_score: number;
 }
 
 export interface FinalAnalysisPrompt {
@@ -131,10 +101,6 @@ export interface FinalAnalysisPrompt {
   job_title: string;
   rag_contexts: RAGContext[];
 }
-
-// ============================================
-// SCORING CONSTANTS
-// ============================================
 
 export const CV_WEIGHTS: CVEvaluationCriteria = {
   technical_skills_weight: 0.4,
@@ -155,10 +121,6 @@ export const SCORING_SCALE = {
   MIN: 1,
   MAX: 5,
 } as const;
-
-// ============================================
-// HELPER TYPES
-// ============================================
 
 export type EvaluationStage = 'cv' | 'project' | 'final';
 
