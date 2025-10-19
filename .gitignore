@@ -35,3 +35,7 @@ Thumbs.db
 
 # Documentation (temporary ignore)
 docs/
+
+# Progress tracking files (personal notes)
+PROGRESS.md
+PROMPT_FOR_TOMORROW.md
