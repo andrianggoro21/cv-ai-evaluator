@@ -11,7 +11,9 @@ dist/
 # Data (runtime generated)
 data/database.sqlite
 data/database.sqlite-journal
+data/cv_evaluator.db
 data/vectordb/
+data/documents/test-samples/
 
 # Uploads (user files)
 uploads/
