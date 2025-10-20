@@ -17,13 +17,13 @@ export class ProjectEvaluationService {
     try {
       const caseStudyResult = await ragService.retrieveContexts(
         'Case study brief requirements',
-        5,
+        2,
         'case-study-brief'
       );
 
       const rubricResult = await ragService.retrieveContexts(
         'Project deliverable scoring rubric',
-        3,
+        2,
         'scoring-rubric'
       );
 
@@ -104,7 +104,9 @@ Evaluate the project deliverable based on the following criteria (scale 1-5):
    - 4 = Strong enhancements
    - 5 = Outstanding creativity
 
-RESPONSE FORMAT (JSON):
+RESPONSE FORMAT:
+Return ONLY a raw JSON object (no markdown, no code blocks, no explanations).
+
 {
   "correctness": <number 1-5>,
   "code_quality": <number 1-5>,
@@ -114,13 +116,17 @@ RESPONSE FORMAT (JSON):
   "feedback": "<detailed 3-5 sentences explaining the scores, highlighting what works well and what could be improved>"
 }
 
-Respond ONLY with valid JSON, no additional text.`;
+IMPORTANT: Return ONLY the JSON object above, nothing else.`;
   }
 
   private parseProjectEvaluationResponse(llmResponse: string): ProjectEvaluationResult {
     try {
-      const jsonMatch = llmResponse.match(/\{[\s\S]*\}/);
+      // Remove markdown code blocks if present
+      let cleanResponse = llmResponse.replace(/```json\s*/g, '').replace(/```\s*/g, '').trim();
+
+      const jsonMatch = cleanResponse.match(/\{[\s\S]*\}/);
       if (!jsonMatch) {
+        console.error('[Project Evaluation] LLM Response:', llmResponse);
         throw new Error('No JSON found in LLM response');
       }
 

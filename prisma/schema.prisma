@@ -47,15 +47,21 @@ model Job {
 
 // Result model - stores AI evaluation results
 model Result {
-  id              Int      @id @default(autoincrement())
-  jobId           String   @unique
-  cvMatchRate     Float?
-  cvFeedback      String?
-  projectScore    Float?
-  projectFeedback String?
-  overallSummary  String?
-  createdAt       DateTime @default(now())
+  id                   Int      @id @default(autoincrement())
+  jobId                String   @unique
+  cvMatchRate          Float?
+  cvFeedback           String?
+  projectScore         Float?
+  projectFeedback      String?
+  overallScore         Float?
+  hiringRecommendation String?
+  finalAnalysis        String?
+  breakdown            String?
+  projectBreakdown     String?
+  strengths            String?
+  weaknesses           String?
+  createdAt            DateTime @default(now())
 
   // Relations
-  job             Job      @relation(fields: [jobId], references: [id])
+  job                  Job      @relation(fields: [jobId], references: [id])
 }

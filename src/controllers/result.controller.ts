@@ -49,7 +49,7 @@ export class ResultController {
           cv_feedback: result.cvFeedback || '',
           project_score: result.projectScore || 0,
           project_feedback: result.projectFeedback || '',
-          overall_summary: result.overallSummary || '',
+          overall_summary: result.finalAnalysis || '',
         },
       };
 

@@ -16,7 +16,7 @@ export class FinalAnalysisService {
     try {
       const ragResult = await ragService.retrieveContexts(
         `Final candidate evaluation for ${jobTitle}`,
-        3
+        1
       );
 
       const prompt = this.buildFinalAnalysisPrompt(
@@ -75,7 +75,9 @@ PROJECT EVALUATION RESULTS:
 TASK:
 Based on the CV and project evaluations, provide a final hiring recommendation.
 
-RESPONSE FORMAT (JSON):
+RESPONSE FORMAT:
+Return ONLY a raw JSON object (no markdown, no code blocks, no explanations).
+
 {
   "overall_summary": "<3-5 sentences synthesizing both evaluations, providing clear hiring recommendation>",
   "recommendation": "<one of: 'Highly Recommended' | 'Recommended' | 'Consider' | 'Not Recommended'>",
@@ -89,7 +91,7 @@ Guidelines for recommendation:
 - "Consider": CV match > 0.50 OR project score > 3.0
 - "Not Recommended": Below thresholds
 
-Respond ONLY with valid JSON, no additional text.`;
+IMPORTANT: Return ONLY the JSON object above, nothing else.`;
   }
 
   private parseFinalAnalysisResponse(
@@ -98,8 +100,12 @@ Respond ONLY with valid JSON, no additional text.`;
     projectEvaluation: ProjectEvaluationResult
   ): FinalAnalysisResult {
     try {
-      const jsonMatch = llmResponse.match(/\{[\s\S]*\}/);
+      // Remove markdown code blocks if present
+      let cleanResponse = llmResponse.replace(/```json\s*/g, '').replace(/```\s*/g, '').trim();
+
+      const jsonMatch = cleanResponse.match(/\{[\s\S]*\}/);
       if (!jsonMatch) {
+        console.error('[Final Analysis] LLM Response:', llmResponse);
         throw new Error('No JSON found in LLM response');
       }
 

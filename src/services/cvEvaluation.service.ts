@@ -13,13 +13,13 @@ export class CVEvaluationService {
     try {
       const ragResult = await ragService.retrieveContexts(
         `CV evaluation for ${jobTitle} position`,
-        5,
+        2,
         'job-description'
       );
 
       const rubricResult = await ragService.retrieveContexts(
         'CV scoring rubric criteria',
-        3,
+        2,
         'scoring-rubric'
       );
 
@@ -85,7 +85,9 @@ Evaluate the candidate's CV based on the following criteria (scale 1-5):
    - 4 = Good
    - 5 = Excellent and well-demonstrated
 
-RESPONSE FORMAT (JSON):
+RESPONSE FORMAT:
+Return ONLY a raw JSON object (no markdown, no code blocks, no explanations).
+
 {
   "technical_skills_match": <number 1-5>,
   "experience_level": <number 1-5>,
@@ -94,13 +96,17 @@ RESPONSE FORMAT (JSON):
   "feedback": "<detailed 3-5 sentences explaining the scores, highlighting strengths and gaps>"
 }
 
-Respond ONLY with valid JSON, no additional text.`;
+IMPORTANT: Return ONLY the JSON object above, nothing else.`;
   }
 
   private parseCVEvaluationResponse(llmResponse: string): CVEvaluationResult {
     try {
-      const jsonMatch = llmResponse.match(/\{[\s\S]*\}/);
+      // Remove markdown code blocks if present
+      let cleanResponse = llmResponse.replace(/```json\s*/g, '').replace(/```\s*/g, '').trim();
+
+      const jsonMatch = cleanResponse.match(/\{[\s\S]*\}/);
       if (!jsonMatch) {
+        console.error('[CV Evaluation] LLM Response:', llmResponse);
         throw new Error('No JSON found in LLM response');
       }
 

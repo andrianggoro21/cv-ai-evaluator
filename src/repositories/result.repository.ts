@@ -10,7 +10,13 @@ export class ResultRepository {
     cvFeedback?: string;
     projectScore?: number;
     projectFeedback?: string;
-    overallSummary?: string;
+    overallScore?: number;
+    hiringRecommendation?: string;
+    finalAnalysis?: string;
+    breakdown?: string;
+    projectBreakdown?: string;
+    strengths?: string;
+    weaknesses?: string;
   }): Promise<Result> {
     return await this.prisma.result.create({
       data,
