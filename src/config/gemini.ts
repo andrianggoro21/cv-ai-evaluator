@@ -29,13 +29,36 @@ export async function generateText(
     try {
       const result = await chatModel.generateContent(prompt);
       const response = result.response;
-      return response.text();
+      const text = response.text();
+
+      if (!text || text.trim().length === 0) {
+        throw new Error('Empty response from Gemini API (possible quota limit)');
+      }
+
+      return text;
     } catch (error: any) {
-      console.error(`Gemini API error (attempt ${i + 1}/${retries}):`, error.message);
+      const isQuotaError =
+        error.message?.includes('quota') ||
+        error.message?.includes('rate limit') ||
+        error.message?.includes('RESOURCE_EXHAUSTED') ||
+        error.message?.includes('Empty response');
 
-      if (i === retries - 1) throw error;
+      if (isQuotaError) {
+        console.error(`[Gemini] Quota/Rate limit error (attempt ${i + 1}/${retries})`);
+      } else {
+        console.error(`[Gemini] API error (attempt ${i + 1}/${retries}):`, error.message);
+      }
 
-      await new Promise(resolve => setTimeout(resolve, Math.pow(2, i) * 1000));
+      if (i === retries - 1) {
+        if (isQuotaError) {
+          throw new Error('Gemini API quota exceeded. Please try again later or use a different API key.');
+        }
+        throw error;
+      }
+
+      const backoffDelay = Math.pow(2, i) * 1000;
+      console.log(`[Gemini] Retrying in ${backoffDelay}ms...`);
+      await new Promise(resolve => setTimeout(resolve, backoffDelay));
     }
   }
 

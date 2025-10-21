@@ -124,13 +124,23 @@ async function processEvaluation(job: Job<EvaluationJobData>): Promise<Evaluatio
       result: completeResult,
     };
   } catch (error: any) {
-    console.error(`[Worker] Job ${jobId} failed:`, error);
+    const isQuotaError = error.message?.includes('quota') || error.message?.includes('rate limit');
+
+    if (isQuotaError) {
+      console.error(`[Worker] Job ${jobId} failed due to API quota limit`);
+    } else {
+      console.error(`[Worker] Job ${jobId} failed:`, error);
+    }
 
     await jobRepository.updateStatus(jobId, 'failed');
 
+    const errorMessage = isQuotaError
+      ? 'API quota limit exceeded. Please try again later.'
+      : error.message;
+
     return {
       success: false,
-      error: error.message,
+      error: errorMessage,
     };
   }
 }

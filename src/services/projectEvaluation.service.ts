@@ -121,8 +121,11 @@ IMPORTANT: Return ONLY the JSON object above, nothing else.`;
 
   private parseProjectEvaluationResponse(llmResponse: string): ProjectEvaluationResult {
     try {
-      // Remove markdown code blocks if present
-      let cleanResponse = llmResponse.replace(/```json\s*/g, '').replace(/```\s*/g, '').trim();
+      // Remove markdown code blocks if present (handle both ```json and ``` with optional spaces)
+      let cleanResponse = llmResponse
+        .replace(/```json/gi, '')
+        .replace(/```/g, '')
+        .trim();
 
       const jsonMatch = cleanResponse.match(/\{[\s\S]*\}/);
       if (!jsonMatch) {
