@@ -1,4 +1,4 @@
-import { generateText } from '@config/gemini';
+import { generateText } from '@config/llm';
 import ragService from './rag.service';
 import {
   ProjectEvaluationResult,
