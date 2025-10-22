@@ -1,0 +1,31 @@
+# Senior Backend Developer - AI Platform
+
+## Position Overview
+Lead backend development for AI-powered platform. Focus on scalability, performance, and integration of machine learning models into production systems.
+
+## Technical Requirements
+- 5+ years backend development experience
+- Expert in Node.js, Python, or Go
+- Deep understanding of microservices architecture
+- Experience with Kubernetes and Docker
+- Strong database design skills (SQL and NoSQL)
+- API design and implementation expertise
+- Knowledge of AI/ML model deployment
+- Vector database experience (Pinecone, Weaviate, LanceDB)
+- Message queue systems (Kafka, RabbitMQ, Redis)
+
+## AI/ML Integration Skills
+- LLM API integration (OpenAI, Anthropic, Google)
+- Prompt engineering and optimization
+- RAG system implementation
+- Embedding generation and semantic search
+- Context injection strategies
+- Model chaining and orchestration
+
+## Responsibilities
+- Architect scalable backend services
+- Implement AI model serving infrastructure
+- Design data pipelines for ML workflows
+- Optimize system performance and reliability
+- Mentor junior developers
+- Technical documentation and knowledge sharing

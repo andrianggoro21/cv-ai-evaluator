@@ -1,0 +1,42 @@
+# CV Evaluation Scoring Rubric
+
+## CV Evaluation Criteria (40% total weight)
+
+### 1. Technical Skills Match (40% of CV score)
+**Scale: 1-5**
+- **5 - Excellent**: All required skills + AI/LLM experience + advanced backend expertise
+- **4 - Strong**: Most required skills + some AI exposure + solid backend experience
+- **3 - Partial**: Core backend skills present, limited AI/LLM experience
+- **2 - Weak**: Few relevant skills, gaps in backend fundamentals
+- **1 - Irrelevant**: Skills not aligned with role requirements
+
+### 2. Experience Level (25% of CV score)
+**Scale: 1-5**
+- **5 - Senior (5+ years)**: Extensive experience with high-impact projects
+- **4 - Mid-Senior (3-4 years)**: Strong track record with complex systems
+- **3 - Mid-level (2-3 years)**: Moderate experience with production systems
+- **2 - Junior (1-2 years)**: Limited professional experience
+- **1 - Entry (< 1 year)**: Minimal or no professional experience
+
+### 3. Relevant Achievements (20% of CV score)
+**Scale: 1-5**
+- **5 - Outstanding**: Major measurable impact (e.g., 10x performance, $M savings)
+- **4 - Significant**: Clear quantifiable contributions to business/product
+- **3 - Moderate**: Some measurable outcomes demonstrated
+- **2 - Minimal**: Few or vague achievements mentioned
+- **1 - None**: No clear achievements or impact stated
+
+### 4. Cultural/Collaboration Fit (15% of CV score)
+**Scale: 1-5**
+- **5 - Excellent**: Strong communication, leadership, learning mindset demonstrated
+- **4 - Good**: Clear collaboration and communication skills
+- **3 - Average**: Basic teamwork indicators present
+- **2 - Minimal**: Little evidence of soft skills
+- **1 - Poor**: No collaboration or communication indicators
+
+## Weight Distribution
+- Technical Skills Match: 40%
+- Experience Level: 25%
+- Relevant Achievements: 20%
+- Cultural/Collaboration Fit: 15%
+- Total: 100% → Convert to 0-1 decimal scale for cv_match_rate

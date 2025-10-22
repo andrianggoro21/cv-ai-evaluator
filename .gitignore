@@ -15,6 +15,10 @@ data/cv_evaluator.db
 data/vectordb/
 data/documents/test-samples/
 
+# Confidential documents (DO NOT COMMIT)
+data/documents/case-study-brief/*.pdf
+docs/Case Study Brief*.pdf
+
 # Uploads (user files)
 uploads/
 

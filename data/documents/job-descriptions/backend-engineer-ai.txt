@@ -1,0 +1,28 @@
+# Backend Engineer Position - AI/LLM Automation
+
+## Role Overview
+We are seeking a Backend Engineer to join our AI automation team. The role focuses on building scalable backend systems that leverage Large Language Models (LLMs) and AI technologies.
+
+## Required Skills
+- Strong proficiency in backend development (Node.js, Express, Python, or similar)
+- Experience with RESTful API design and implementation
+- Database expertise (SQL and NoSQL)
+- Knowledge of AI/LLM integration (OpenAI, Gemini, Claude, etc.)
+- Understanding of RAG (Retrieval-Augmented Generation) systems
+- Experience with vector databases (LanceDB, Pinecone, Chroma, etc.)
+- Familiarity with cloud platforms (AWS, GCP, Azure)
+- Queue/job processing systems (BullMQ, RabbitMQ, etc.)
+
+## Desired Experience
+- 3-5 years of backend development experience
+- Previous work with LLM-based applications
+- Experience building production-grade AI systems
+- Strong problem-solving and system design skills
+
+## Key Responsibilities
+- Design and implement AI-powered backend services
+- Build RAG pipelines for context-aware AI responses
+- Optimize LLM prompts and chaining strategies
+- Ensure system resilience and error handling
+- Write clean, maintainable, and well-tested code
+- Document technical decisions and architecture

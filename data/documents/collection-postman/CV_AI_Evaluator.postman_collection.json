@@ -1,0 +1,828 @@
+{
+	"info": {
+		"_postman_id": "cv-ai-evaluator-collection",
+		"name": "CV AI Evaluator API",
+		"description": "Complete API collection for CV AI Evaluator - AI-powered candidate screening system with 3-stage evaluation pipeline (CV → Project → Final Analysis)",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "cv-evaluator"
+	},
+	"item": [
+		{
+			"name": "Health Check",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"Response has success field\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.success).to.be.true;",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/health",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"health"
+					]
+				},
+				"description": "Check if the API server is running and healthy"
+			},
+			"response": [
+				{
+					"name": "Health Check - Success",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/health",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"health"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"success\": true,\n    \"status\": \"healthy\",\n    \"timestamp\": \"2025-10-21T12:00:00.000Z\",\n    \"environment\": \"development\"\n}"
+				}
+			]
+		},
+		{
+			"name": "Upload Documents",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"Response contains document IDs\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.cvDocumentId).to.exist;",
+							"    pm.expect(jsonData.projectDocumentId).to.exist;",
+							"    ",
+							"    // Save IDs to environment variables for next requests",
+							"    pm.environment.set(\"cvDocumentId\", jsonData.cvDocumentId);",
+							"    pm.environment.set(\"projectDocumentId\", jsonData.projectDocumentId);",
+							"});",
+							"",
+							"pm.test(\"Response has success message\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.success).to.be.true;",
+							"    pm.expect(jsonData.message).to.include(\"uploaded successfully\");",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "cv",
+							"type": "file",
+							"src": "data/documents/test-samples/sample_cv.pdf",
+							"description": "Candidate CV in PDF format"
+						},
+						{
+							"key": "projectReport",
+							"type": "file",
+							"src": "data/documents/test-samples/sample_project.pdf",
+							"description": "Project report in PDF format"
+						}
+					]
+				},
+				"url": {
+					"raw": "{{base_url}}/api/upload",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"upload"
+					]
+				},
+				"description": "Upload CV and Project Report PDF files. Returns document IDs for evaluation."
+			},
+			"response": [
+				{
+					"name": "Upload Documents - Success",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "cv",
+									"type": "file",
+									"src": "sample_cv.pdf"
+								},
+								{
+									"key": "projectReport",
+									"type": "file",
+									"src": "sample_project.pdf"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{base_url}}/api/upload",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"upload"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"success\": true,\n    \"message\": \"Documents uploaded successfully\",\n    \"cvDocumentId\": \"b56782c5-5ea3-49d3-879e-d45de924e374\",\n    \"projectDocumentId\": \"904d9558-6123-4a24-957d-febb4cf0642e\"\n}"
+				},
+				{
+					"name": "Upload Documents - Missing Files",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "cv",
+									"type": "file",
+									"src": "sample_cv.pdf"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{base_url}}/api/upload",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"upload"
+							]
+						}
+					},
+					"status": "Bad Request",
+					"code": 400,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"success\": false,\n    \"message\": \"Both CV and Project Report files are required\"\n}"
+				}
+			]
+		},
+		{
+			"name": "Submit Evaluation",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"Response contains job ID and status\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.id).to.exist;",
+							"    pm.expect(jsonData.status).to.equal(\"queued\");",
+							"    ",
+							"    // Save job ID for checking results",
+							"    pm.environment.set(\"jobId\", jsonData.id);",
+							"});",
+							"",
+							"console.log(\"Job ID:\", pm.response.json().id);",
+							"console.log(\"Wait ~30 seconds for Groq or ~2 minutes for Gemini to complete evaluation\");"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"cvDocumentId\": \"{{cvDocumentId}}\",\n    \"projectDocumentId\": \"{{projectDocumentId}}\",\n    \"job_title\": \"Backend Engineer\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_url}}/api/evaluate",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"evaluate"
+					]
+				},
+				"description": "Submit CV and Project Report for AI evaluation. This triggers the 3-stage evaluation pipeline:\n\n1. CV Evaluation (skills, experience, achievements, cultural fit)\n2. Project Evaluation (correctness, code quality, documentation)\n3. Final Analysis (hiring recommendation)\n\nProcessing time:\n- Groq: ~30 seconds\n- Gemini: ~2 minutes"
+			},
+			"response": [
+				{
+					"name": "Submit Evaluation - Success",
+					"originalRequest": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"cvDocumentId\": \"b56782c5-5ea3-49d3-879e-d45de924e374\",\n    \"projectDocumentId\": \"904d9558-6123-4a24-957d-febb4cf0642e\",\n    \"job_title\": \"Backend Engineer\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/api/evaluate",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"evaluate"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"id\": \"571e1148-6246-4fc6-a9e8-6c356a446be9\",\n    \"status\": \"queued\"\n}"
+				},
+				{
+					"name": "Submit Evaluation - Missing Fields",
+					"originalRequest": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"cvDocumentId\": \"b56782c5-5ea3-49d3-879e-d45de924e374\",\n    \"job_title\": \"Backend Engineer\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/api/evaluate",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"evaluate"
+							]
+						}
+					},
+					"status": "Bad Request",
+					"code": 400,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"success\": false,\n    \"message\": \"job_title, cvDocumentId, and projectDocumentId are required\"\n}"
+				}
+			]
+		},
+		{
+			"name": "Get Evaluation Result",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"Response has job ID and status\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.id).to.exist;",
+							"    pm.expect(jsonData.status).to.exist;",
+							"});",
+							"",
+							"var jsonData = pm.response.json();",
+							"",
+							"if (jsonData.status === \"completed\") {",
+							"    pm.test(\"Completed job has result\", function () {",
+							"        pm.expect(jsonData.result).to.exist;",
+							"        pm.expect(jsonData.result.cv_match_rate).to.exist;",
+							"        pm.expect(jsonData.result.project_score).to.exist;",
+							"        pm.expect(jsonData.result.overall_summary).to.exist;",
+							"    });",
+							"    ",
+							"    console.log(\"✅ Evaluation Completed!\");",
+							"    console.log(\"CV Match Rate:\", jsonData.result.cv_match_rate);",
+							"    console.log(\"Project Score:\", jsonData.result.project_score);",
+							"} else if (jsonData.status === \"queued\" || jsonData.status === \"processing\") {",
+							"    console.log(\"⏳ Job is still\", jsonData.status);",
+							"    console.log(\"Wait a few seconds and try again\");",
+							"} else if (jsonData.status === \"failed\") {",
+							"    console.log(\"❌ Job failed:\", jsonData.error);",
+							"}"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/api/result/{{jobId}}",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"result",
+						"{{jobId}}"
+					]
+				},
+				"description": "Get evaluation result by job ID. Status can be:\n- **queued**: Job is waiting in queue\n- **processing**: Job is currently being evaluated\n- **completed**: Evaluation finished successfully (includes result)\n- **failed**: Evaluation failed (includes error message)\n\nFor completed jobs, the response includes:\n- cv_match_rate (0-1 scale)\n- cv_feedback (detailed explanation)\n- project_score (1-5 scale)\n- project_feedback (detailed explanation)\n- overall_summary (hiring recommendation)"
+			},
+			"response": [
+				{
+					"name": "Get Result - Queued",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/result/571e1148-6246-4fc6-a9e8-6c356a446be9",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"result",
+								"571e1148-6246-4fc6-a9e8-6c356a446be9"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"id\": \"571e1148-6246-4fc6-a9e8-6c356a446be9\",\n    \"status\": \"queued\"\n}"
+				},
+				{
+					"name": "Get Result - Processing",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/result/571e1148-6246-4fc6-a9e8-6c356a446be9",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"result",
+								"571e1148-6246-4fc6-a9e8-6c356a446be9"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"id\": \"571e1148-6246-4fc6-a9e8-6c356a446be9\",\n    \"status\": \"processing\"\n}"
+				},
+				{
+					"name": "Get Result - Completed",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/result/571e1148-6246-4fc6-a9e8-6c356a446be9",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"result",
+								"571e1148-6246-4fc6-a9e8-6c356a446be9"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"id\": \"571e1148-6246-4fc6-a9e8-6c356a446be9\",\n    \"status\": \"completed\",\n    \"result\": {\n        \"cv_match_rate\": 0.86,\n        \"cv_feedback\": \"Strong match with required technical skills including backend development, APIs, databases, and cloud technologies. Demonstrates 4+ years of solid experience with production systems. Notable achievements in performance optimization and system scalability. Good collaboration and learning mindset evident from project descriptions.\",\n        \"project_score\": 3.7,\n        \"project_feedback\": \"Excels in code quality with clean, modular architecture and proper use of TypeScript. Strong implementation of LLM chaining and RAG integration. Good error handling with retry mechanisms. Documentation is clear with comprehensive setup instructions. Could improve with more extensive testing coverage.\",\n        \"overall_summary\": \"Strong candidate with excellent backend skills and solid AI/LLM integration experience. The project demonstrates good understanding of prompt engineering and RAG systems. Recommended for Backend Engineer position with focus on AI-powered systems. Key strengths: technical skills, code quality, and system design. Areas for growth: test coverage and advanced AI optimization techniques.\"\n    }\n}"
+				},
+				{
+					"name": "Get Result - Failed",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/result/571e1148-6246-4fc6-a9e8-6c356a446be9",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"result",
+								"571e1148-6246-4fc6-a9e8-6c356a446be9"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"id\": \"571e1148-6246-4fc6-a9e8-6c356a446be9\",\n    \"status\": \"failed\",\n    \"error\": \"Evaluation job failed\"\n}"
+				},
+				{
+					"name": "Get Result - Not Found",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/result/invalid-job-id",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"result",
+								"invalid-job-id"
+							]
+						}
+					},
+					"status": "Not Found",
+					"code": 404,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"success\": false,\n    \"message\": \"Job not found\"\n}"
+				}
+			]
+		},
+		{
+			"name": "List All Jobs",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"Response has jobs array\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.success).to.be.true;",
+							"    pm.expect(jsonData.jobs).to.be.an('array');",
+							"    pm.expect(jsonData.total).to.exist;",
+							"});",
+							"",
+							"console.log(\"Total jobs:\", pm.response.json().total);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/api/result",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"result"
+					]
+				},
+				"description": "Get list of all evaluation jobs with their status"
+			},
+			"response": [
+				{
+					"name": "List All Jobs - Success",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/result",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"result"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"success\": true,\n    \"jobs\": [\n        {\n            \"id\": \"571e1148-6246-4fc6-a9e8-6c356a446be9\",\n            \"status\": \"completed\",\n            \"jobTitle\": \"Backend Engineer\",\n            \"createdAt\": \"2025-10-21T12:00:00.000Z\"\n        },\n        {\n            \"id\": \"5c0136bd-d6e6-4250-bf49-c95d45a66ffc\",\n            \"status\": \"processing\",\n            \"jobTitle\": \"Frontend Engineer\",\n            \"createdAt\": \"2025-10-21T12:05:00.000Z\"\n        }\n    ],\n    \"total\": 2\n}"
+				}
+			]
+		},
+		{
+			"name": "Complete Flow - Backend Engineer",
+			"item": [
+				{
+					"name": "1. Upload CV and Project",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Upload successful\", function () {",
+									"    pm.response.to.have.status(200);",
+									"    var jsonData = pm.response.json();",
+									"    pm.environment.set(\"cvDocumentId\", jsonData.cvDocumentId);",
+									"    pm.environment.set(\"projectDocumentId\", jsonData.projectDocumentId);",
+									"});",
+									"",
+									"console.log(\"✅ Step 1: Documents uploaded\");"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "cv",
+									"type": "file",
+									"src": "data/documents/test-samples/sample_cv.pdf"
+								},
+								{
+									"key": "projectReport",
+									"type": "file",
+									"src": "data/documents/test-samples/sample_project.pdf"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{base_url}}/api/upload",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"upload"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "2. Submit Evaluation",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Evaluation submitted\", function () {",
+									"    pm.response.to.have.status(200);",
+									"    var jsonData = pm.response.json();",
+									"    pm.environment.set(\"jobId\", jsonData.id);",
+									"});",
+									"",
+									"console.log(\"✅ Step 2: Evaluation queued\");",
+									"console.log(\"⏳ Wait ~30 seconds for Groq (or ~2 minutes for Gemini)\");"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"cvDocumentId\": \"{{cvDocumentId}}\",\n    \"projectDocumentId\": \"{{projectDocumentId}}\",\n    \"job_title\": \"Backend Engineer\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/api/evaluate",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"evaluate"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "3. Check Result (Retry until completed)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = pm.response.json();",
+									"",
+									"if (jsonData.status === \"completed\") {",
+									"    console.log(\"✅ Step 3: Evaluation completed!\");",
+									"    console.log(\"CV Match Rate:\", jsonData.result.cv_match_rate);",
+									"    console.log(\"Project Score:\", jsonData.result.project_score);",
+									"} else {",
+									"    console.log(\"⏳ Status:\", jsonData.status);",
+									"    console.log(\"Run this request again in a few seconds\");",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/result/{{jobId}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"result",
+								"{{jobId}}"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"description": "Complete evaluation flow from upload to result. Run requests in sequence:\n\n1. Upload documents → saves IDs to environment\n2. Submit evaluation → saves job ID to environment\n3. Check result → retry until status is \"completed\"\n\n**Timing:**\n- Groq: ~30 seconds total\n- Gemini: ~2 minutes total"
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "base_url",
+			"value": "http://localhost:3000",
+			"type": "string"
+		},
+		{
+			"key": "cvDocumentId",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "projectDocumentId",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "jobId",
+			"value": "",
+			"type": "string"
+		}
+	]
+}

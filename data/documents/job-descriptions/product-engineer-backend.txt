@@ -1,0 +1,25 @@
+# Product Engineer (Backend) - Rakamin 2025
+
+## About the Role
+Building new product features alongside frontend engineer and product manager using Agile methodology. Write clean, efficient code to enhance product codebase. This role touches on building AI-powered systems, designing and orchestrating how LLMs integrate into product ecosystem.
+
+## Key Responsibilities
+- Collaborate with frontend engineers and 3rd parties for robust backend solutions
+- Develop and maintain server-side logic for central database
+- Design and fine-tune AI prompts aligned with product requirements
+- Build LLM chaining flows with reliable output passing
+- Implement RAG by embedding and retrieving context from vector databases
+- Handle long-running AI processes with job orchestration and async workers
+- Design safeguards for 3rd party API failures and LLM nondeterminism
+- Write reusable, testable, and efficient code
+- Conduct full product lifecycles from idea to deployment
+
+## Required Skills
+- Backend languages: Node.js, Django, Rails
+- Database management: MySQL, PostgreSQL, MongoDB
+- RESTful APIs and security compliance
+- Cloud technologies: AWS, Google Cloud, Azure
+- User authentication and authorization
+- Scalable application design
+- Automated testing platforms
+- Familiarity with LLM APIs, embeddings, vector databases

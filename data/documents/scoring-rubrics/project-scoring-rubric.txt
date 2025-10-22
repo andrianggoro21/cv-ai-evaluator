@@ -1,0 +1,57 @@
+# Project Deliverable Evaluation Scoring Rubric
+
+## Project Evaluation Criteria (60% total weight)
+
+### 1. Correctness - Prompt & Chaining (30% of project score)
+**Scale: 1-5**
+- **5 - Excellent**: Perfect implementation of prompt design, LLM chaining, RAG context injection
+- **4 - Strong**: Correct implementation with minor issues
+- **3 - Adequate**: Core functionality works, some logic gaps
+- **2 - Weak**: Partial implementation, significant issues
+- **1 - Poor**: Not implemented or fundamentally broken
+
+### 2. Code Quality & Structure (25% of project score)
+**Scale: 1-5**
+- **5 - Excellent**: Clean architecture, modular design, comprehensive tests, best practices
+- **4 - Strong**: Good structure, some tests, follows conventions
+- **3 - Adequate**: Decent organization, minimal tests
+- **2 - Weak**: Poor structure, hard to maintain
+- **1 - Poor**: Unorganized, no tests, anti-patterns
+
+### 3. Resilience & Error Handling (20% of project score)
+**Scale: 1-5**
+- **5 - Production-ready**: Robust error handling, retries, graceful degradation
+- **4 - Strong**: Good error handling for common scenarios
+- **3 - Adequate**: Basic error handling present
+- **2 - Weak**: Minimal error handling
+- **1 - None**: No error handling, fragile system
+
+### 4. Documentation & Explanation (15% of project score)
+**Scale: 1-5**
+- **5 - Excellent**: Comprehensive README, clear setup, architecture explanations, trade-offs discussed
+- **4 - Strong**: Good documentation, clear instructions
+- **3 - Adequate**: Basic README, setup works
+- **2 - Weak**: Minimal documentation
+- **1 - None**: No documentation
+
+### 5. Creativity/Bonus (10% of project score)
+**Scale: 1-5**
+- **5 - Outstanding**: Multiple innovative features beyond requirements
+- **4 - Strong**: Meaningful enhancements
+- **3 - Good**: Some useful extras
+- **2 - Minimal**: Very basic additions
+- **1 - None**: No extras
+
+## Weight Distribution
+- Correctness: 30%
+- Code Quality: 25%
+- Resilience & Error Handling: 20%
+- Documentation: 15%
+- Creativity/Bonus: 10%
+- Total: 100% → Weighted average 1-5 scale for project_score
+
+## Final Hiring Recommendation Guidelines
+- **Highly Recommended**: CV match > 0.75 AND project score > 4.0
+- **Recommended**: CV match > 0.65 AND project score > 3.5
+- **Consider**: CV match > 0.50 OR project score > 3.0
+- **Not Recommended**: Below thresholds
