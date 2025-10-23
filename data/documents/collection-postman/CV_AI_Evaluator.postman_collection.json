@@ -1,10 +1,10 @@
 {
 	"info": {
-		"_postman_id": "cv-ai-evaluator-collection",
+		"_postman_id": "728610a9-bc2c-4bbb-8aa9-b490f95ffb81",
 		"name": "CV AI Evaluator API",
 		"description": "Complete API collection for CV AI Evaluator - AI-powered candidate screening system with 3-stage evaluation pipeline (CV → Project → Final Analysis)",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "cv-evaluator"
+		"_exporter_id": "43819320"
 	},
 	"item": [
 		{
@@ -110,15 +110,15 @@
 					"formdata": [
 						{
 							"key": "cv",
+							"description": "Candidate CV in PDF format",
 							"type": "file",
-							"src": "data/documents/test-samples/sample_cv.pdf",
-							"description": "Candidate CV in PDF format"
+							"src": "data/documents/test-samples/sample_cv.pdf"
 						},
 						{
 							"key": "projectReport",
+							"description": "Project report in PDF format",
 							"type": "file",
-							"src": "data/documents/test-samples/sample_project.pdf",
-							"description": "Project report in PDF format"
+							"src": "data/documents/test-samples/sample_project.pdf"
 						}
 					]
 				},
@@ -635,152 +635,6 @@
 					"body": "{\n    \"success\": true,\n    \"jobs\": [\n        {\n            \"id\": \"571e1148-6246-4fc6-a9e8-6c356a446be9\",\n            \"status\": \"completed\",\n            \"jobTitle\": \"Backend Engineer\",\n            \"createdAt\": \"2025-10-21T12:00:00.000Z\"\n        },\n        {\n            \"id\": \"5c0136bd-d6e6-4250-bf49-c95d45a66ffc\",\n            \"status\": \"processing\",\n            \"jobTitle\": \"Frontend Engineer\",\n            \"createdAt\": \"2025-10-21T12:05:00.000Z\"\n        }\n    ],\n    \"total\": 2\n}"
 				}
 			]
-		},
-		{
-			"name": "Complete Flow - Backend Engineer",
-			"item": [
-				{
-					"name": "1. Upload CV and Project",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"pm.test(\"Upload successful\", function () {",
-									"    pm.response.to.have.status(200);",
-									"    var jsonData = pm.response.json();",
-									"    pm.environment.set(\"cvDocumentId\", jsonData.cvDocumentId);",
-									"    pm.environment.set(\"projectDocumentId\", jsonData.projectDocumentId);",
-									"});",
-									"",
-									"console.log(\"✅ Step 1: Documents uploaded\");"
-								],
-								"type": "text/javascript"
-							}
-						}
-					],
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "formdata",
-							"formdata": [
-								{
-									"key": "cv",
-									"type": "file",
-									"src": "data/documents/test-samples/sample_cv.pdf"
-								},
-								{
-									"key": "projectReport",
-									"type": "file",
-									"src": "data/documents/test-samples/sample_project.pdf"
-								}
-							]
-						},
-						"url": {
-							"raw": "{{base_url}}/api/upload",
-							"host": [
-								"{{base_url}}"
-							],
-							"path": [
-								"api",
-								"upload"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "2. Submit Evaluation",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"pm.test(\"Evaluation submitted\", function () {",
-									"    pm.response.to.have.status(200);",
-									"    var jsonData = pm.response.json();",
-									"    pm.environment.set(\"jobId\", jsonData.id);",
-									"});",
-									"",
-									"console.log(\"✅ Step 2: Evaluation queued\");",
-									"console.log(\"⏳ Wait ~30 seconds for Groq (or ~2 minutes for Gemini)\");"
-								],
-								"type": "text/javascript"
-							}
-						}
-					],
-					"request": {
-						"method": "POST",
-						"header": [
-							{
-								"key": "Content-Type",
-								"value": "application/json"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n    \"cvDocumentId\": \"{{cvDocumentId}}\",\n    \"projectDocumentId\": \"{{projectDocumentId}}\",\n    \"job_title\": \"Backend Engineer\"\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{base_url}}/api/evaluate",
-							"host": [
-								"{{base_url}}"
-							],
-							"path": [
-								"api",
-								"evaluate"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "3. Check Result (Retry until completed)",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"var jsonData = pm.response.json();",
-									"",
-									"if (jsonData.status === \"completed\") {",
-									"    console.log(\"✅ Step 3: Evaluation completed!\");",
-									"    console.log(\"CV Match Rate:\", jsonData.result.cv_match_rate);",
-									"    console.log(\"Project Score:\", jsonData.result.project_score);",
-									"} else {",
-									"    console.log(\"⏳ Status:\", jsonData.status);",
-									"    console.log(\"Run this request again in a few seconds\");",
-									"}"
-								],
-								"type": "text/javascript"
-							}
-						}
-					],
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{base_url}}/api/result/{{jobId}}",
-							"host": [
-								"{{base_url}}"
-							],
-							"path": [
-								"api",
-								"result",
-								"{{jobId}}"
-							]
-						}
-					},
-					"response": []
-				}
-			],
-			"description": "Complete evaluation flow from upload to result. Run requests in sequence:\n\n1. Upload documents → saves IDs to environment\n2. Submit evaluation → saves job ID to environment\n3. Check result → retry until status is \"completed\"\n\n**Timing:**\n- Groq: ~30 seconds total\n- Gemini: ~2 minutes total"
 		}
 	],
 	"event": [
