@@ -39,9 +39,5 @@ Thumbs.db
 *.swo
 *~
 
-# Documentation (temporary ignore)
+# Docs
 docs/
-
-# Progress tracking files (personal notes)
-PROGRESS.md
-PROMPT_FOR_TOMORROW.md
